@@ -30,14 +30,25 @@ public class Client
         _socket.close();
     }
 
-    public String recvString()
+    public String recvString() throws IOException
     {
-        return new String();
+        // Read string size (2 bytes) from the network.
+        // These 2 bytes are an unsigned 16-bit integer in little-endian.
+        // Java does not know unsigned types, so this code is a bit funny..
+        int byte1 = _in.readUnsignedShort();
+        int byte2 = _in.readUnsignedShort();
+        int stringSize = (byte2 << 8) | byte1;
+
+        // Read string content from the network.
+        byte[] bytes = new byte[stringSize];
+        _in.readFully(bytes);
+
+        return new String(bytes, "UTF-8");
     }
 
-    public JSONObject recvJson()
+    public JSONObject recvJson() throws IOException
     {
-        return new JSONObject();
+        return new JSONObject(recvString());
     }
 
     // (╯°□°）╯︵ ┻━┻)
@@ -47,10 +58,6 @@ public class Client
     public static void putUnsignedShort(ByteBuffer bb, int position, int value)
     {
         bb.putShort(position, (short) (value & 0xffff));
-    }
-    public static int getUnsignedShort(ByteBuffer bb)
-    {
-        return (bb.getShort() & 0xffff);
     }
 
     public void sendString(String s) throws IOException
@@ -68,9 +75,9 @@ public class Client
         _out.write(bytes);
     }
 
-    public void sendJson(JSONObject object)
+    public void sendJson(JSONObject object) throws IOException
     {
-
+        sendString(object.toString());
     }
 
     private Socket _socket;
