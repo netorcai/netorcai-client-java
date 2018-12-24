@@ -1,3 +1,5 @@
+package org.netorcai.message;
+
 import org.json.*;
 
 public class DoInitMessage

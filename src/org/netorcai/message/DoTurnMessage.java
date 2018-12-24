@@ -1,3 +1,5 @@
+package org.netorcai.message;
+
 import java.util.*;
 import org.json.*;
 
