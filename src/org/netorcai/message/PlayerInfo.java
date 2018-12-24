@@ -1,3 +1,4 @@
+import java.util.*;
 import org.json.*;
 
 public class PlayerInfo
@@ -16,5 +17,17 @@ public class PlayerInfo
         p.isConnected = o.getBoolean("is_connected");
 
         return p;
+    }
+
+    public static ArrayList<PlayerInfo> parse(JSONArray a)
+    {
+        ArrayList<PlayerInfo> pinfos = new ArrayList<PlayerInfo>();
+
+        for (int i = 0; i < a.length(); i++)
+        {
+            pinfos.add(PlayerInfo.parse(a.getJSONObject(i)));
+        }
+
+        return pinfos;
     }
 }
