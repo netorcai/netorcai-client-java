@@ -1,24 +1,38 @@
 # Variables
-cflags = -g
-classpath = "./deps/json-20180813.jar:./class"
-sourcepath = "./src/org/netorcai:./src/org/netorcai/message"
-destination = "./class"
+cflags = -g -Xlint:all
+classpath = ".:./deps/json-20180813.jar"
+sourcepath = "./org/netorcai:./org/netorcai/message"
+
+classpath_example = ".:./deps/json-20180813.jar:netorcai-client-java.jar"
+sourcepath_example = "./org/netorcai/example"
 
 # Rules
 rule create_dir
     command = mkdir -p $out
 
 rule java_to_class
-    command = javac $cflags -cp $classpath -sourcepath $sourcepath -d $destination $in
+    command = javac $cflags -cp $classpath -sourcepath $sourcepath $in
+
+rule java_to_class_example
+    command = javac $cflags -cp $classpath_example -sourcepath $sourcepath_example $in
+
+rule create_jar
+    command = jar -cf $out $in
+
+rule create_jar_player
+    command = jar -cfe $out org.netorcai.example.HelloPlayer $in
 
 # Targets
-build class: create_dir
-build class/org/netorcai/Client.class: java_to_class src/org/netorcai/Client.java | class
-build class/org/netorcai/message/DoInitMessage.class: java_to_class src/org/netorcai/message/DoInitMessage.java | class
-build class/org/netorcai/message/DoTurnMessage.class: java_to_class src/org/netorcai/message/DoTurnMessage.java | class class/org/netorcai/message/PlayerActions.class
-build class/org/netorcai/message/GameEndsMessage.class: java_to_class src/org/netorcai/message/GameEndsMessage.java | class
-build class/org/netorcai/message/GameStartsMessage.class: java_to_class src/org/netorcai/message/GameStartsMessage.java | class class/org/netorcai/message/PlayerInfo.class
-build class/org/netorcai/message/LoginAckMessage.class: java_to_class src/org/netorcai/message/LoginAckMessage.java | class
-build class/org/netorcai/message/PlayerActions.class: java_to_class src/org/netorcai/message/PlayerActions.java | class
-build class/org/netorcai/message/PlayerInfo.class: java_to_class src/org/netorcai/message/PlayerInfo.java | class
-build class/org/netorcai/message/TurnMessage.class: java_to_class src/org/netorcai/message/TurnMessage.java | class class/org/netorcai/message/PlayerInfo.class
+build org/netorcai/Client.class: java_to_class org/netorcai/Client.java
+build org/netorcai/message/DoInitMessage.class: java_to_class org/netorcai/message/DoInitMessage.java
+build org/netorcai/message/DoTurnMessage.class: java_to_class org/netorcai/message/DoTurnMessage.java | org/netorcai/message/PlayerActions.class
+build org/netorcai/message/GameEndsMessage.class: java_to_class org/netorcai/message/GameEndsMessage.java
+build org/netorcai/message/GameStartsMessage.class: java_to_class org/netorcai/message/GameStartsMessage.java | org/netorcai/message/PlayerInfo.class
+build org/netorcai/message/LoginAckMessage.class: java_to_class org/netorcai/message/LoginAckMessage.java
+build org/netorcai/message/PlayerActions.class: java_to_class org/netorcai/message/PlayerActions.java
+build org/netorcai/message/PlayerInfo.class: java_to_class org/netorcai/message/PlayerInfo.java
+build org/netorcai/message/TurnMessage.class: java_to_class org/netorcai/message/TurnMessage.java | org/netorcai/message/PlayerInfo.class
+build netorcai-client-java.jar: create_jar org/netorcai/Client.class org/netorcai/message/DoInitMessage.class org/netorcai/message/DoTurnMessage.class org/netorcai/message/GameEndsMessage.class org/netorcai/message/GameStartsMessage.class org/netorcai/message/LoginAckMessage.class org/netorcai/message/PlayerActions.class org/netorcai/message/PlayerInfo.class org/netorcai/message/TurnMessage.class
+
+build org/netorcai/example/HelloPlayer.class: java_to_class_example org/netorcai/example/HelloPlayer.java | netorcai-client-java.jar
+build hello-player.jar : create_jar_player org/netorcai/example/HelloPlayer.class

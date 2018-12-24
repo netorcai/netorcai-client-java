@@ -1,3 +1,4 @@
-class
+*.class
+*.jar
 .ninja_deps
 .ninja_log
