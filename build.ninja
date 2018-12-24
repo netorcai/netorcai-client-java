@@ -1,0 +1,24 @@
+# Variables
+cflags = -g
+classpath = "./deps/json-20180813.jar:./class"
+sourcepath = "./src/org/netorcai:./src/org/netorcai/message"
+destination = "./class"
+
+# Rules
+rule create_dir
+    command = mkdir -p $out
+
+rule java_to_class
+    command = javac $cflags -cp $classpath -sourcepath $sourcepath -d $destination $in
+
+# Targets
+build class: create_dir
+build class/org/netorcai/Client.class: java_to_class src/org/netorcai/Client.java | class
+build class/org/netorcai/message/DoInitMessage.class: java_to_class src/org/netorcai/message/DoInitMessage.java | class
+build class/org/netorcai/message/DoTurnMessage.class: java_to_class src/org/netorcai/message/DoTurnMessage.java | class class/org/netorcai/message/PlayerActions.class
+build class/org/netorcai/message/GameEndsMessage.class: java_to_class src/org/netorcai/message/GameEndsMessage.java | class
+build class/org/netorcai/message/GameStartsMessage.class: java_to_class src/org/netorcai/message/GameStartsMessage.java | class class/org/netorcai/message/PlayerInfo.class
+build class/org/netorcai/message/LoginAckMessage.class: java_to_class src/org/netorcai/message/LoginAckMessage.java | class
+build class/org/netorcai/message/PlayerActions.class: java_to_class src/org/netorcai/message/PlayerActions.java | class
+build class/org/netorcai/message/PlayerInfo.class: java_to_class src/org/netorcai/message/PlayerInfo.java | class
+build class/org/netorcai/message/TurnMessage.class: java_to_class src/org/netorcai/message/TurnMessage.java | class class/org/netorcai/message/PlayerInfo.class
