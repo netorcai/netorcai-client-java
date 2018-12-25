@@ -10,6 +10,7 @@ public class DoTurnMessage
     public static DoTurnMessage parse(JSONObject o)
     {
         DoTurnMessage m = new DoTurnMessage();
+        m.playerActions = new ArrayList<PlayerActions>();
 
         JSONArray a = o.getJSONArray("player_actions");
         for (int i = 0; i < a.length(); i++)
