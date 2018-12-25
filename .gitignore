@@ -1,4 +1,1 @@
-*.class
-*.jar
-.ninja_deps
-.ninja_log
+target
