@@ -1,10 +1,10 @@
 # Variables
 cflags = -g -Xlint:all
-classpath = ".:./deps/json-20180813.jar"
-sourcepath = "./org/netorcai:./org/netorcai/message"
+classpath = ".:json-20180813.jar"
+sourcepath = "org/netorcai:org/netorcai/message"
 
-classpath_example = ".:./deps/json-20180813.jar:netorcai-client-java.jar"
-sourcepath_example = "./org/netorcai/example"
+classpath_example = ".:json-20180813.jar:netorcai-client-java.jar"
+sourcepath_example = "org/netorcai/example"
 
 # Rules
 rule create_dir
@@ -19,8 +19,8 @@ rule java_to_class_example
 rule create_jar
     command = jar -cf $out $in
 
-rule create_jar_player
-    command = jar -cfe $out org.netorcai.example.HelloPlayer $in
+rule create_jar_manifest
+    command = jar -cfm $out $in
 
 # Targets
 build org/netorcai/message/DoInitMessage.class: java_to_class org/netorcai/message/DoInitMessage.java
@@ -35,4 +35,4 @@ build org/netorcai/Client.class: java_to_class org/netorcai/Client.java | org/ne
 build netorcai-client-java.jar: create_jar org/netorcai/Client.class org/netorcai/message/DoInitMessage.class org/netorcai/message/DoTurnMessage.class org/netorcai/message/GameEndsMessage.class org/netorcai/message/GameStartsMessage.class org/netorcai/message/LoginAckMessage.class org/netorcai/message/PlayerActions.class org/netorcai/message/PlayerInfo.class org/netorcai/message/TurnMessage.class
 
 build org/netorcai/example/HelloPlayer.class: java_to_class_example org/netorcai/example/HelloPlayer.java | netorcai-client-java.jar
-build hello-player.jar : create_jar_player org/netorcai/example/HelloPlayer.class
+build hello-player.jar : create_jar_manifest manifest/hello-player org/netorcai/example/HelloPlayer.class
