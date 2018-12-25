@@ -37,8 +37,8 @@ public class Client
         // Read string size (2 bytes) from the network.
         // These 2 bytes are an unsigned 16-bit integer in little-endian.
         // Java does not know unsigned types, so this code is a bit funny..
-        int byte1 = _in.readByte();
-        int byte2 = _in.readByte();
+        int byte1 = _in.readByte() & 0xff;
+        int byte2 = _in.readByte() & 0xff;
         int stringSize = (byte2 << 8) | byte1;
 
         // Read string content from the network.
