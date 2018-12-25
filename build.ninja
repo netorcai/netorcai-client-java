@@ -23,7 +23,6 @@ rule create_jar_player
     command = jar -cfe $out org.netorcai.example.HelloPlayer $in
 
 # Targets
-build org/netorcai/Client.class: java_to_class org/netorcai/Client.java
 build org/netorcai/message/DoInitMessage.class: java_to_class org/netorcai/message/DoInitMessage.java
 build org/netorcai/message/DoTurnMessage.class: java_to_class org/netorcai/message/DoTurnMessage.java | org/netorcai/message/PlayerActions.class
 build org/netorcai/message/GameEndsMessage.class: java_to_class org/netorcai/message/GameEndsMessage.java
@@ -32,6 +31,7 @@ build org/netorcai/message/LoginAckMessage.class: java_to_class org/netorcai/mes
 build org/netorcai/message/PlayerActions.class: java_to_class org/netorcai/message/PlayerActions.java
 build org/netorcai/message/PlayerInfo.class: java_to_class org/netorcai/message/PlayerInfo.java
 build org/netorcai/message/TurnMessage.class: java_to_class org/netorcai/message/TurnMessage.java | org/netorcai/message/PlayerInfo.class
+build org/netorcai/Client.class: java_to_class org/netorcai/Client.java | org/netorcai/message/DoInitMessage.class org/netorcai/message/DoTurnMessage.class org/netorcai/message/GameEndsMessage.class org/netorcai/message/GameStartsMessage.class org/netorcai/message/LoginAckMessage.class org/netorcai/message/PlayerActions.class org/netorcai/message/PlayerInfo.class org/netorcai/message/TurnMessage.class
 build netorcai-client-java.jar: create_jar org/netorcai/Client.class org/netorcai/message/DoInitMessage.class org/netorcai/message/DoTurnMessage.class org/netorcai/message/GameEndsMessage.class org/netorcai/message/GameStartsMessage.class org/netorcai/message/LoginAckMessage.class org/netorcai/message/PlayerActions.class org/netorcai/message/PlayerInfo.class org/netorcai/message/TurnMessage.class
 
 build org/netorcai/example/HelloPlayer.class: java_to_class_example org/netorcai/example/HelloPlayer.java | netorcai-client-java.jar

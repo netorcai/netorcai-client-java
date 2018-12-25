@@ -6,6 +6,8 @@ import java.nio.charset.Charset;
 import java.nio.*;
 import org.json.*;
 
+import org.netorcai.message.*;
+
 public class Client
 {
     public void connect(String hostname, int port) throws UnknownHostException, IOException
@@ -80,7 +82,132 @@ public class Client
         sendString(object.toString());
     }
 
+    public LoginAckMessage readLoginAck() throws IOException
+    {
+        JSONObject msg = recvJson();
+        switch(msg.getString("message_type"))
+        {
+            case "LOGIN_ACK":
+                return new LoginAckMessage();
+            case "KICK":
+                throw new RuntimeException("Kicked from netorcai. Reason: " + msg.getString("kick_reason"));
+            default:
+                throw new RuntimeException("Unexpected message received: " + msg.getString("message_type"));
+        }
+    }
+
+    public GameStartsMessage readGameStarts() throws IOException
+    {
+        JSONObject msg = recvJson();
+        switch(msg.getString("message_type"))
+        {
+            case "GAME_STARTS":
+                return GameStartsMessage.parse(msg);
+            case "KICK":
+                throw new RuntimeException("Kicked from netorcai. Reason: " + msg.getString("kick_reason"));
+            default:
+                throw new RuntimeException("Unexpected message received: " + msg.getString("message_type"));
+        }
+    }
+
+    public TurnMessage readTurn() throws IOException
+    {
+        JSONObject msg = recvJson();
+        switch(msg.getString("message_type"))
+        {
+            case "TURN":
+                return TurnMessage.parse(msg);
+            case "GAME_ENDS":
+                throw new RuntimeException("Game over!");
+            case "KICK":
+                throw new RuntimeException("Kicked from netorcai. Reason: " + msg.getString("kick_reason"));
+            default:
+                throw new RuntimeException("Unexpected message received: " + msg.getString("message_type"));
+        }
+    }
+
+    public GameEndsMessage readGameEnds() throws IOException
+    {
+        JSONObject msg = recvJson();
+        switch(msg.getString("message_type"))
+        {
+            case "GAME_ENDS":
+                return GameEndsMessage.parse(msg);
+            case "KICK":
+                throw new RuntimeException("Kicked from netorcai. Reason: " + msg.getString("kick_reason"));
+            default:
+                throw new RuntimeException("Unexpected message received: " + msg.getString("message_type"));
+        }
+    }
+
+    public DoInitMessage readDoInit() throws IOException
+    {
+        JSONObject msg = recvJson();
+        switch(msg.getString("message_type"))
+        {
+            case "DO_INIT":
+                return DoInitMessage.parse(msg);
+            case "KICK":
+                throw new RuntimeException("Kicked from netorcai. Reason: " + msg.getString("kick_reason"));
+            default:
+                throw new RuntimeException("Unexpected message received: " + msg.getString("message_type"));
+        }
+    }
+
+    public DoTurnMessage readDoTurn() throws IOException
+    {
+        JSONObject msg = recvJson();
+        switch(msg.getString("message_type"))
+        {
+            case "DO_TURN":
+                return DoTurnMessage.parse(msg);
+            case "KICK":
+                throw new RuntimeException("Kicked from netorcai. Reason: " + msg.getString("kick_reason"));
+            default:
+                throw new RuntimeException("Unexpected message received: " + msg.getString("message_type"));
+        }
+    }
+
+    public void sendLogin(String nickname, String role) throws IOException
+    {
+        JSONObject o = new JSONObject();
+        o.put("message_type", "LOGIN");
+        o.put("nickname", nickname);
+        o.put("role", role);
+
+        sendJson(o);
+    }
+
+    public void sendTurnAck(int turnNumber, JSONArray actions) throws IOException
+    {
+        JSONObject o = new JSONObject();
+        o.put("message_type", "TURN_ACK");
+        o.put("turn_number", turnNumber);
+        o.put("actions", actions);
+
+        sendJson(o);
+    }
+
+    public void sendDoInitAck(JSONObject initialGameState) throws IOException
+    {
+        JSONObject o = new JSONObject();
+        o.put("message_type", "DO_INIT_ACK");
+        o.put("initial_game_state", initialGameState);
+
+        sendJson(o);
+    }
+
+    public void sendDoTurnAck(JSONObject gameState, int winnerPlayerID) throws IOException
+    {
+        JSONObject o = new JSONObject();
+        o.put("message_type", "DO_TURN_ACK");
+        o.put("game_state", gameState);
+        o.put("winner_player_id", winnerPlayerID);
+
+        sendJson(o);
+    }
+
     private Socket _socket;
-    DataInputStream _in;
-    DataOutputStream _out;
+    private DataInputStream _in;
+    private DataOutputStream _out;
 }
