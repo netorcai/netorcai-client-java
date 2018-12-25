@@ -19,8 +19,8 @@ public class GameStartsMessage
         m.playerID = o.getInt("player_id");
         m.nbPlayers = o.getInt("nb_players");
         m.nbTurnsMax = o.getInt("nb_turns_max");
-        m.msBeforeFirstTurn = o.getDouble("ms_before_first_turn");
-        m.msBetweenTurns = o.getDouble("ms_between_turns");
+        m.msBeforeFirstTurn = o.getDouble("milliseconds_before_first_turn");
+        m.msBetweenTurns = o.getDouble("milliseconds_between_turns");
         m.playersInfo = PlayerInfo.parse(o.getJSONArray("players_info"));
         m.initialGameState = o.getJSONObject("initial_game_state");
 
