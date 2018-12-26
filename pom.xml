@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.netorcai</groupId>
   <artifactId>netorcai-client-java</artifactId>
-  <version>0.1</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
 
   <name>Java™ version of the netorcai client library.</name>
