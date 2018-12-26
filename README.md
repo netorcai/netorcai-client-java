@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/netorcai/netorcai-client-java/master.svg?maxAge=600)](https://travis-ci.org/netorcai/netorcai-client-java)
+
 netorcai-client-java
 ====================
 Java™ version of the [netorcai] client library.
