@@ -36,9 +36,10 @@ public class TestClient
     @Test
     public void testEverythingGoesWell() throws IOException
     {
+        Netorcai n = null;
         try
         {
-            Netorcai n = launchNetorcaiWaitListening(1, 0);
+            n = launchNetorcaiWaitListening(1, 0);
 
             Client gl = new Client();
             gl.connect();
@@ -68,11 +69,11 @@ public class TestClient
             gl.sendDoTurnAck(new JSONObject("{\"all_clients\": {\"gl\": \"Java™\"}}"), -1);
 
             player.readGameEnds();
-            n.process.destroy();
         }
         finally
         {
-            Runtime.getRuntime().exec("killall netorcai");
+            if (n != null)
+                n.process.destroy();
         }
     }
 }
