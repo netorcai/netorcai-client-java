@@ -11,5 +11,5 @@ Run instructions
 ----------------
 
 ```bash
-java -jar target/hello-player-*.jar
+java -jar target/hello-gl-*.jar
 ```
