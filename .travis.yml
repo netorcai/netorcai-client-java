@@ -3,7 +3,7 @@ nix: 2.1.1
 
 script:
   # Install java, maven and netorcai
-  - nix-env -i openjdk -i apache-maven
+  - nix-env -i apache-maven
   - nix-env -f https://github.com/netorcai/pkgs/archive/master.tar.gz -iA netorcai_dev
 
   # Test the library
