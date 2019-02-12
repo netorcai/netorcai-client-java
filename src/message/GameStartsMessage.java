@@ -7,6 +7,7 @@ public class GameStartsMessage
 {
     public int playerID;
     public int nbPlayers;
+    public int nbSpecialPlayers;
     public int nbTurnsMax;
     public double msBeforeFirstTurn;
     public double msBetweenTurns;
@@ -18,6 +19,7 @@ public class GameStartsMessage
         GameStartsMessage m = new GameStartsMessage();
         m.playerID = o.getInt("player_id");
         m.nbPlayers = o.getInt("nb_players");
+        m.nbSpecialPlayers = o.getInt("nb_special_players");
         m.nbTurnsMax = o.getInt("nb_turns_max");
         m.msBeforeFirstTurn = o.getDouble("milliseconds_before_first_turn");
         m.msBetweenTurns = o.getDouble("milliseconds_between_turns");
