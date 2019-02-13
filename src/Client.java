@@ -35,12 +35,14 @@ public class Client
 
     public String recvString() throws IOException
     {
-        // Read string size (2 bytes) from the network.
-        // These 2 bytes are an unsigned 16-bit integer in little-endian.
+        // Read string size (4 bytes) from the network.
+        // These 4 bytes are an unsigned 32-bit integer in little-endian.
         // Java does not know unsigned types, so this code is a bit funny..
         int byte1 = _in.readByte() & 0xff;
         int byte2 = _in.readByte() & 0xff;
-        int stringSize = (byte2 << 8) | byte1;
+        int byte3 = _in.readByte() & 0xff;
+        int byte4 = _in.readByte() & 0xff;
+        int stringSize = (byte4 << 24) | (byte3 << 16) | (byte2 << 8) | byte1;
 
         // Read string content from the network.
         byte[] bytes = new byte[stringSize];
@@ -58,9 +60,9 @@ public class Client
     // Looks like Java does not know unsigned integers in 2018 (No, I did NOT meant 1958).
     // I'll consider using Java2K next time.
     // Hero of the day: https://stackoverflow.com/a/9883582
-    public static void putUnsignedShort(ByteBuffer bb, int position, int value)
+    public static void putUnsignedInt(ByteBuffer bb, long value)
     {
-        bb.putShort(position, (short) (value & 0xffff));
+        bb.putInt((int) (value & 0xffffffffL));
     }
 
     public void sendString(String s) throws IOException
@@ -69,9 +71,9 @@ public class Client
         byte[] bytes = stringToSend.getBytes(Charset.forName("UTF-8"));
 
         // Send string size on the socket
-        ByteBuffer bb = ByteBuffer.allocate(2);
+        ByteBuffer bb = ByteBuffer.allocate(4);
         bb.order(ByteOrder.LITTLE_ENDIAN);
-        putUnsignedShort(bb, 0, bytes.length);
+        putUnsignedInt(bb, bytes.length);
         _out.write(bb.array());
 
         // Send bytes on the socket
