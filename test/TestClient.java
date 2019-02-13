@@ -255,7 +255,6 @@ public class TestClient
                 player2.sendTurnAck(turn.turnNumber, new JSONArray("[{\"player\": \"Java\"}]"));
             }
 
-            System.out.println("hey");
             gl.readDoTurn();
             gl.sendDoTurnAck(new JSONObject("{\"all_clients\": {\"gl\": \"Java\"}}"), -1);
 
