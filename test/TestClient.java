@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.netorcai.message.*;
+import org.netorcai.Version;
 
 public class TestClient
 {
@@ -274,6 +275,26 @@ public class TestClient
         catch (IOException e) {}
         finally
         {
+            if (n != null)
+                n.process.destroy();
+        }
+    }
+
+    @Test
+    public void testNonCriticalMetaprotocolVersionMismatch()
+    {
+        Netorcai n = null;
+        try
+        {
+            Version.minor += 1;
+            n = launchNetorcaiWaitListening(10, 10);
+            Client c = getLoggedPlayer();
+            c.readLoginAck();
+        }
+        catch (IOException e) {}
+        finally
+        {
+            Version.minor -= 1;
             if (n != null)
                 n.process.destroy();
         }

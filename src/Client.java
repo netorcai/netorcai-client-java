@@ -7,6 +7,7 @@ import java.nio.*;
 import org.json.*;
 
 import org.netorcai.message.*;
+import org.netorcai.Version;
 
 public class Client
 {
@@ -89,7 +90,7 @@ public class Client
         switch(msg.getString("message_type"))
         {
             case "LOGIN_ACK":
-                return new LoginAckMessage();
+                return LoginAckMessage.parse(msg);
             case "KICK":
                 throw new RuntimeException("Kicked from netorcai. Reason: " + msg.getString("kick_reason"));
             default:
@@ -175,6 +176,7 @@ public class Client
         o.put("message_type", "LOGIN");
         o.put("nickname", nickname);
         o.put("role", role);
+        o.put("metaprotocol_version", Version.metaprotocolVersion());
 
         sendJson(o);
     }
